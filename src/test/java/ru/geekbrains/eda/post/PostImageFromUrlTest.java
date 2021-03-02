@@ -1,8 +1,8 @@
-package ru.geekbrains.eda.Post;
+package ru.geekbrains.eda.post;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import ru.geekbrains.eda.Service.ServiceTests;
+import ru.geekbrains.eda.service.ServiceTests;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;

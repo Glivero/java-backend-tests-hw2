@@ -1,4 +1,4 @@
-package ru.geekbrains.eda.Service;
+package ru.geekbrains.eda.service;
 
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
@@ -18,14 +18,14 @@ import java.util.Properties;
 
 public class ServiceTests {
 
-    protected static Properties prop = new Properties();
-    protected static String token;
-    protected static String username;
-    protected static String imageId;
-    protected static String imageUrl;
-    protected static Map<String, String> headers = new HashMap<>();
-    protected static ResponseSpecification responseSpecification = null;
-    protected static RequestSpecification requestSpecification;
+    public static Properties prop = new Properties();
+    public static String token;
+    public static String username;
+    public static String imageId;
+    public static String imageUrl;
+    public static Map<String, String> headers = new HashMap<>();
+    public static ResponseSpecification responseSpecification = null;
+    public static RequestSpecification requestSpecification;
 
     @BeforeAll
     static void beforeAll() {
@@ -55,8 +55,8 @@ public class ServiceTests {
                 .setContentType(ContentType.ANY)
                 .build();
 
-        RestAssured.responseSpecification = responseSpecification;
-        RestAssured.requestSpecification = requestSpecification;
+//        RestAssured.responseSpecification = responseSpecification;
+//        RestAssured.requestSpecification = requestSpecification;
 
     }
 

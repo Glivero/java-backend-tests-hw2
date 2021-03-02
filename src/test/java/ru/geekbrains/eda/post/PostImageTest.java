@@ -1,10 +1,10 @@
-package ru.geekbrains.eda.Post;
+package ru.geekbrains.eda.post;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.geekbrains.eda.Service.ServiceTests;
+import ru.geekbrains.eda.service.ServiceTests;
 
 import java.io.File;
 import java.io.IOException;
