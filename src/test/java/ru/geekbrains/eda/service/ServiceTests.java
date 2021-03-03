@@ -24,8 +24,9 @@ public class ServiceTests {
     public static String imageId;
     public static String imageUrl;
     public static Map<String, String> headers = new HashMap<>();
-    public static ResponseSpecification responseSpecification = null;
+    public static ResponseSpecification responseSpecification;
     public static RequestSpecification requestSpecification;
+    public static RequestSpecification requestSpecificationWithoutAuth;
 
     @BeforeAll
     static void beforeAll() {
@@ -42,17 +43,20 @@ public class ServiceTests {
         RestAssured.filters(new AllureRestAssured());
 
         responseSpecification = new ResponseSpecBuilder()
-                .expectStatusCode(200)
-                .expectStatusLine("HTTP/1.1 200 OK")
+//                .expectStatusCode(200)
+//                .expectStatusLine("HTTP/1.1 200 OK")
                 .expectContentType(ContentType.JSON)
                 .expectResponseTime(Matchers.lessThan(5000L))
-                .expectHeader("Access-Control-Allow-Credentials","true")
                 .build();
 
         requestSpecification = new RequestSpecBuilder()
                 .addHeader("Authorization", token)
                 .setAccept(ContentType.ANY)
-                .setContentType(ContentType.ANY)
+                .build();
+
+        requestSpecificationWithoutAuth = new RequestSpecBuilder()
+                .addHeader("Authorization", "")
+                .setAccept(ContentType.ANY)
                 .build();
 
 //        RestAssured.responseSpecification = responseSpecification;

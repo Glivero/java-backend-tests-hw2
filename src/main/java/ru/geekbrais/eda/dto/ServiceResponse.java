@@ -16,10 +16,10 @@ import lombok.NoArgsConstructor;
 public class ServiceResponse<AnyData> {
 
     @JsonProperty("data")
-    private AnyData data;
+    public AnyData data;
     @JsonProperty("success")
-    private Boolean success;
+    public Boolean success;
     @JsonProperty("status")
-    private Integer status;
+    public Integer status;
 
 }

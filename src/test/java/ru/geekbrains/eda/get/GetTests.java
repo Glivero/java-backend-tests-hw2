@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import ru.geekbrains.eda.service.ServiceTests;
 import ru.geekbrais.eda.Endpoints;
 import ru.geekbrais.eda.dto.GetAccountResponse;
+import ru.geekbrais.eda.dto.GetImageResponse;
+import ru.geekbrais.eda.dto.GetNegativeResponse;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -16,16 +18,21 @@ public class GetTests extends ServiceTests {
 
     @Test
     void getAccountInfoPositiveTest(){
-        given()
+        GetAccountResponse response = given()
                 .spec(requestSpecification)
                 .when()
                 .get(Endpoints.GET_ACCOUNT_REQUEST, username)
                 .prettyPeek()
-                .then();
+                .then()
+                .extract()
+                .body()
+                .as(GetAccountResponse.class);
+        log.info(response.getStatus().toString());
+        assertThat(response.getStatus(),equalTo(200));
     }
 
     @Test
-    void getAccountInfoPositiveWithObjectPTest(){
+    void getAccountInfoPositiveWithManyObjectsTest(){
         GetAccountResponse response = given()
                 .spec(requestSpecification)
                 .when()
@@ -39,33 +46,65 @@ public class GetTests extends ServiceTests {
         assertThat(response.getStatus(),equalTo(200));
         assertThat(response.getData().getId(),equalTo(142829187));
         assertThat(response.getData().getUrl(),equalTo("Glivero"));
+        assertThat(response.getData().getCreated(),equalTo(1608706699));
     }
 
+
+
+
     @Test
-    public void getImageBrokenEndpointTest() {
-        given()
-                .headers("Authorization", ServiceTests.token)
-                .expect()
-                .body("success", is(false))
+    void getAccountInfoNoAuthTest(){
+        GetNegativeResponse response = given()
+                .spec(requestSpecificationWithoutAuth)
                 .when()
-                .get("/image")
+                .get(Endpoints.GET_ACCOUNT_REQUEST, "")
                 .prettyPeek()
                 .then()
-                .statusCode(400);
+                .extract()
+                .body()
+                .as(GetNegativeResponse.class);
+        log.info(response.getStatus().toString());
+        assertThat(response.getStatus(),equalTo(403));
+        assertThat(response.getSuccess(),equalTo(false));
+        assertThat(response.getData().error,equalTo("The access token was not found."));
+    }
+
+
+
+
+
+
+
+    @Test
+    void getImageBrokenEndpointTest() {
+        GetImageResponse response = given()
+                .spec(requestSpecification)
+                .when()
+                .get(Endpoints.GET_IMAGE_REQUEST_BROKEN_ENDPOINT)
+                .prettyPeek()
+                .then()
+                .extract()
+                .body()
+                .as(GetImageResponse.class);
+        log.info(response.getStatus().toString());
+        assertThat(response.getStatus(),equalTo(400));
     }
 
     @Test
-    public void getImageTest() {
-        given()
+    public void getImagePositiveTest() {
+        GetImageResponse response = given()
                 .spec(requestSpecification)
                 .expect()
-                .body("success", is(true))
                 .when()
-                .get("/image/{id}", imageId)
+                .get(Endpoints.GET_IMAGE_REQUEST, imageId)
                 .prettyPeek()
-                .then()
-                .statusCode(200);
+                .as(GetImageResponse.class);
+        log.info(response.getStatus().toString());
+        assertThat(response.getStatus(),equalTo(200));
+        assertThat(response.getData().id,equalTo("SOUdj4z"));
+        assertThat(response.getData().type,equalTo("image/jpeg"));
     }
+
 
     @Test
     public void getImageNoAuthorizationTest() {

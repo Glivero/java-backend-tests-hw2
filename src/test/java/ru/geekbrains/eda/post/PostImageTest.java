@@ -29,7 +29,7 @@ public class PostImageTest extends ServiceTests {
     @Test
     void uploadFileTest() {
         uploadedImageHashCode = given()
-                .headers("Authorization", token)
+                .spec(requestSpecification)
                 .multiPart("image", encodedImage)
                 .expect()
                 .body("success", is(true))
