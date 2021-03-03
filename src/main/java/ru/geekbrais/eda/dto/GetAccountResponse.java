@@ -3,6 +3,7 @@ package ru.geekbrais.eda.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+@Data
 public class GetAccountResponse extends ServiceResponse<GetAccountResponse.AccountData>{
 
     @Data

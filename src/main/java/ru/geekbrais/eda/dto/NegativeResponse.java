@@ -10,7 +10,8 @@ import lombok.Data;
         "method"
 })
 
-public class GetNegativeResponse extends ServiceResponse<GetNegativeResponse.AccountData>{
+@Data
+public class NegativeResponse extends ServiceResponse<NegativeResponse.AccountData>{
 
     @Data
     public static class AccountData {

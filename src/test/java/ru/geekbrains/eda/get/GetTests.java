@@ -6,11 +6,10 @@ import ru.geekbrains.eda.service.ServiceTests;
 import ru.geekbrais.eda.Endpoints;
 import ru.geekbrais.eda.dto.GetAccountResponse;
 import ru.geekbrais.eda.dto.GetImageResponse;
-import ru.geekbrais.eda.dto.GetNegativeResponse;
+import ru.geekbrais.eda.dto.NegativeResponse;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @Slf4j
@@ -27,8 +26,6 @@ public class GetTests extends ServiceTests {
                 .extract()
                 .body()
                 .as(GetAccountResponse.class);
-        log.info(response.getStatus().toString());
-        assertThat(response.getStatus(),equalTo(200));
     }
 
     @Test
@@ -49,12 +46,9 @@ public class GetTests extends ServiceTests {
         assertThat(response.getData().getCreated(),equalTo(1608706699));
     }
 
-
-
-
     @Test
-    void getAccountInfoNoAuthTest(){
-        GetNegativeResponse response = given()
+    void getAccountInfoNoTokenTest(){
+        NegativeResponse response = given()
                 .spec(requestSpecificationWithoutAuth)
                 .when()
                 .get(Endpoints.GET_ACCOUNT_REQUEST, "")
@@ -62,32 +56,27 @@ public class GetTests extends ServiceTests {
                 .then()
                 .extract()
                 .body()
-                .as(GetNegativeResponse.class);
+                .as(NegativeResponse.class);
         log.info(response.getStatus().toString());
         assertThat(response.getStatus(),equalTo(403));
         assertThat(response.getSuccess(),equalTo(false));
         assertThat(response.getData().error,equalTo("The access token was not found."));
     }
 
-
-
-
-
-
-
     @Test
-    void getImageBrokenEndpointTest() {
-        GetImageResponse response = given()
-                .spec(requestSpecification)
+    void getAccountInfoNoAuthTest(){
+        NegativeResponse response = given()
                 .when()
-                .get(Endpoints.GET_IMAGE_REQUEST_BROKEN_ENDPOINT)
+                .get(Endpoints.GET_ACCOUNT_REQUEST, "")
                 .prettyPeek()
                 .then()
                 .extract()
                 .body()
-                .as(GetImageResponse.class);
+                .as(NegativeResponse.class);
         log.info(response.getStatus().toString());
-        assertThat(response.getStatus(),equalTo(400));
+        assertThat(response.getStatus(),equalTo(401));
+        assertThat(response.getSuccess(),equalTo(false));
+        assertThat(response.getData().error,equalTo("Authentication required"));
     }
 
     @Test
@@ -105,17 +94,35 @@ public class GetTests extends ServiceTests {
         assertThat(response.getData().type,equalTo("image/jpeg"));
     }
 
+    @Test
+    void getImageBrokenEndpointTest() {
+        NegativeResponse response = given()
+                .spec(requestSpecification)
+                .when()
+                .get(Endpoints.GET_IMAGE_REQUEST_BROKEN_ENDPOINT)
+                .prettyPeek()
+                .then()
+                .extract()
+                .body()
+                .as(NegativeResponse.class);
+        log.info(response.getStatus().toString());
+        assertThat(response.getStatus(),equalTo(400));
+        assertThat(response.getSuccess(),equalTo(false));
+        assertThat(response.getData().error,equalTo("An image ID is required for a GET request to /image"));
+    }
 
     @Test
     public void getImageNoAuthorizationTest() {
-        given()
+        NegativeResponse response = given()
                 .expect()
-                .body("success", is(false))
                 .when()
-                .get("/image/SOUdj4z")
+                .get(Endpoints.GET_IMAGE_REQUEST, imageId)
                 .prettyPeek()
-                .then()
-                .statusCode(401);
+                .as(NegativeResponse.class);
+        log.info(response.getStatus().toString());
+        assertThat(response.getStatus(),equalTo(401));
+        assertThat(response.getSuccess(),equalTo(false));
+        assertThat(response.getData().error,equalTo("Authentication required"));
     }
 
 }

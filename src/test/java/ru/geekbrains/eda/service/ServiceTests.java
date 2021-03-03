@@ -1,10 +1,13 @@
 package ru.geekbrains.eda.service;
 
+import com.github.javafaker.Faker;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
+import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.specification.MultiPartSpecification;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.hamcrest.Matchers;
@@ -27,6 +30,9 @@ public class ServiceTests {
     public static ResponseSpecification responseSpecification;
     public static RequestSpecification requestSpecification;
     public static RequestSpecification requestSpecificationWithoutAuth;
+    public static MultiPartSpecification multiPartSpec;
+    public static RequestSpecification uploadReqSpec;
+    Faker faker = new Faker();
 
     @BeforeAll
     static void beforeAll() {
@@ -43,8 +49,8 @@ public class ServiceTests {
         RestAssured.filters(new AllureRestAssured());
 
         responseSpecification = new ResponseSpecBuilder()
-//                .expectStatusCode(200)
-//                .expectStatusLine("HTTP/1.1 200 OK")
+                .expectStatusCode(200)
+                .expectStatusLine("HTTP/1.1 200 OK")
                 .expectContentType(ContentType.JSON)
                 .expectResponseTime(Matchers.lessThan(5000L))
                 .build();
@@ -70,5 +76,18 @@ public class ServiceTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected void preparePostSpecs(Object content) {
+        multiPartSpec = new MultiPartSpecBuilder(content)
+                .controlName("image")
+                .build();
+        uploadReqSpec = new RequestSpecBuilder()
+                .addHeader("Authorization", token)
+                .setAccept(ContentType.ANY)
+                .build()
+                .multiPart(multiPartSpec)
+                .formParam("title", faker.chuckNorris().fact())
+                .formParam("description", faker.harryPotter().quote());
     }
 }
