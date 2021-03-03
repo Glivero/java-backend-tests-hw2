@@ -7,7 +7,6 @@ public enum Images {
     BIG_SIZE("src/test/resources/big.png"),
     SMALL("src/test/resources/small.jpg");
 
-
     public final String path;
 
     Images(String path) {

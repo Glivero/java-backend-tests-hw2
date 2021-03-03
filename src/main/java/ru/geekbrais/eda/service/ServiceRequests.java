@@ -1,8 +1,8 @@
-package ru.geekbrais.eda.steps;
+package ru.geekbrais.eda.service;
 
 import io.restassured.specification.RequestSpecification;
 import lombok.experimental.UtilityClass;
-import ru.geekbrais.eda.Endpoints;
+import ru.geekbrais.eda.utils.Endpoints;
 import ru.geekbrais.eda.dto.PostImageResponse;
 
 import static io.restassured.RestAssured.given;
@@ -17,7 +17,6 @@ public class ServiceRequests {
                 .post(Endpoints.POST_IMAGE_REQUEST)
                 .prettyPeek()
                 .then()
-                .statusCode(200)
                 .extract()
                 .body()
                 .as(PostImageResponse.class);

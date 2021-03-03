@@ -1,20 +1,14 @@
 package ru.geekbrais.eda.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
-
-@JsonPropertyOrder({
-        "error",
-        "request",
-        "method"
-})
+import ru.geekbrais.eda.service.ServiceResponse;
 
 @Data
-public class NegativeResponse extends ServiceResponse<NegativeResponse.AccountData>{
+public class NegativeResponse extends ServiceResponse<NegativeResponse.NegativeData> {
 
     @Data
-    public static class AccountData {
+    public static class NegativeData {
 
         @JsonProperty("error")
         public String error;

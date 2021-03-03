@@ -1,4 +1,4 @@
-package ru.geekbrais.eda.dto;
+package ru.geekbrais.eda.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

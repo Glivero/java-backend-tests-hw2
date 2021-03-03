@@ -1,4 +1,4 @@
-package ru.geekbrais.eda;
+package ru.geekbrais.eda.utils;
 
 public class Endpoints {
     public static final String GET_ACCOUNT_REQUEST = "/account/{id}";

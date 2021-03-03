@@ -2,9 +2,10 @@ package ru.geekbrais.eda.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import ru.geekbrais.eda.service.ServiceResponse;
 
 @Data
-public class GetAccountResponse extends ServiceResponse<GetAccountResponse.AccountData>{
+public class GetAccountResponse extends ServiceResponse<GetAccountResponse.AccountData> {
 
     @Data
     public static class AccountData {

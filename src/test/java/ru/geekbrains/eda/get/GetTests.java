@@ -3,7 +3,7 @@ package ru.geekbrains.eda.get;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import ru.geekbrains.eda.service.ServiceTests;
-import ru.geekbrais.eda.Endpoints;
+import ru.geekbrais.eda.utils.Endpoints;
 import ru.geekbrais.eda.dto.GetAccountResponse;
 import ru.geekbrais.eda.dto.GetImageResponse;
 import ru.geekbrais.eda.dto.NegativeResponse;
@@ -124,5 +124,4 @@ public class GetTests extends ServiceTests {
         assertThat(response.getSuccess(),equalTo(false));
         assertThat(response.getData().error,equalTo("Authentication required"));
     }
-
 }

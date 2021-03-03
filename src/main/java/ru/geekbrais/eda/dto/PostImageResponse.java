@@ -2,6 +2,7 @@ package ru.geekbrais.eda.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import ru.geekbrais.eda.service.ServiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;
