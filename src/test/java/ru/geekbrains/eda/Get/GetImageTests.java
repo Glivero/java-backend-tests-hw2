@@ -13,12 +13,11 @@ public class GetImageTests extends ServiceTests{
         given()
                 .headers("Authorization", ServiceTests.token)
                 .expect()
-                .body("success", is(false))
                 .when()
-                .get("/image")
+                .get("/image/broken")
                 .prettyPeek()
                 .then()
-                .statusCode(400);
+                .statusCode(404);
     }
 
     @Test
@@ -40,7 +39,7 @@ public class GetImageTests extends ServiceTests{
                 .expect()
                 .body("success", is(false))
                 .when()
-                .get("/image/SOUdj4z")
+                .get("/image")
                 .prettyPeek()
                 .then()
                 .statusCode(401);

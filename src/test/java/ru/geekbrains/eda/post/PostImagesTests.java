@@ -44,6 +44,27 @@ public class PostImagesTests extends ServiceTests {
     }
 
     @Test
+    void uploadNormalImageTest() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File inputFile = new File(Objects.requireNonNull(classLoader.getResource("kosmonavt.jpg")).getFile());
+        uploadedImageHashCode = given()
+                .headers("Authorization", token)
+                .multiPart("image", inputFile)
+                .expect()
+                .body("success", is(true))
+                .body("data.id", is(notNullValue()))
+                .when()
+                .post("/image")
+                .prettyPeek()
+                .then()
+                .statusCode(200)
+                .extract()
+                .response()
+                .jsonPath()
+                .getString("data.deletehash");
+    }
+
+    @Test
     void uploadImageUsingUrlTest() {
         uploadedImageHashCode = given()
                 .headers("Authorization", ServiceTests.token)
@@ -86,7 +107,7 @@ public class PostImagesTests extends ServiceTests {
     void uploadLargeFileTest() {
         ClassLoader classLoader = getClass().getClassLoader();
         File inputFile = new File(Objects.requireNonNull(classLoader.getResource("Large.png")).getFile());
-        uploadedImageHashCode = given()
+        given()
                 .headers("Authorization", token)
                 .multiPart("image", inputFile)
                 .expect()
@@ -102,10 +123,66 @@ public class PostImagesTests extends ServiceTests {
                 .getString("data.deletehash");
     }
 
+    @Test
+    void uploadBrokenEndpointTest() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File inputFile = new File(Objects.requireNonNull(classLoader.getResource("kosmonavt.jpg")).getFile());
+        given()
+                .headers("Authorization", token)
+                .multiPart("image", inputFile)
+                .expect()
+                .log()
+                .all()
+                .when()
+                .post("/image/broken")
+                .prettyPeek()
+                .then()
+                .statusCode(404);
+    }
+
+
+    @Test
+    void uploadWrongFormatFileTest() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File inputFile = new File(Objects.requireNonNull(classLoader.getResource("Wrong.txt")).getFile());
+        given()
+                .headers("Authorization", token)
+                .multiPart("image", inputFile)
+                .expect()
+                .body("success", is(false))
+                .when()
+                .post("/image")
+                .prettyPeek()
+                .then()
+                .statusCode(400)
+                .extract()
+                .response()
+                .jsonPath()
+                .getString("data.deletehash");
+    }
+
+    @Test
+    void uploadNoAuthImageTest() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File inputFile = new File(Objects.requireNonNull(classLoader.getResource("Small.jpg")).getFile());
+        uploadedImageHashCode = given()
+                .multiPart("image", inputFile)
+                .expect()
+                .body("success", is(false))
+                .when()
+                .post("/image")
+                .prettyPeek()
+                .then()
+                .statusCode(401)
+                .extract()
+                .response()
+                .jsonPath()
+                .getString("data.deletehash");
+    }
+
     @AfterEach
     void tearDown() {
         try {
-
             given()
                     .headers("Authorization", token)
                     .when()
