@@ -1,4 +1,4 @@
-package ru.geekbrains.eda.Get;
+package ru.geekbrains.eda.get;
 
 import org.junit.jupiter.api.Test;
 import ru.geekbrains.eda.Service.ServiceTests;

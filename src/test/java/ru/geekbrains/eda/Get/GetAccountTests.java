@@ -1,4 +1,4 @@
-package ru.geekbrains.eda.Get;
+package ru.geekbrains.eda.get;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;

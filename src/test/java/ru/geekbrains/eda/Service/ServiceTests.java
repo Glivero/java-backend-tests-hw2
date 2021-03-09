@@ -2,12 +2,15 @@ package ru.geekbrains.eda.Service;
 
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 public class ServiceTests {
@@ -31,6 +34,18 @@ public class ServiceTests {
 
         RestAssured.baseURI = prop.getProperty("base.url");
         RestAssured.filters(new AllureRestAssured());
+    }
+
+    public byte[] getFileContentInBase64() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File inputFile = new File(Objects.requireNonNull(classLoader.getResource("kosmonavt.jpg")).getFile());
+        byte[] fileContent = new byte[0];
+        try {
+            fileContent =   FileUtils.readFileToByteArray(inputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileContent;
     }
 
     private static void loadProperties() {
